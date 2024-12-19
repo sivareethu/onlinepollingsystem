@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Poll</title>
+    <link rel="icon" href="polling.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="poll-container">
+        <center>
+            <h1>Registration for Elective Subject📋</h1>
+            <h3>Fill out the form carefully for Registration</h3>
+            <form id="registrationForm">
+                <table>
+                    <tr>
+                        <td>Name</td>
+                        <td><input type="text" id="name" placeholder="Enter your name"></td>
+                    </tr>
+                    <tr>
+                        <td>Register Number</td>
+                        <td><input type="number" id="registerNumber" placeholder="Enter your Register No"></td>
+                    </tr>
+                    <tr>
+                        <td>Department</td>
+                        <td><input type="text" id="department" placeholder="Enter your Department"></td>
+                    </tr>
+                </table>
+            </form>
+            <h4>Select your Respective Elective</h4>
+            <form id="pollForm">
+                <table border="1">
+                    <tr>
+                        <th>DSE3 Subjects</th>
+                        <th>DSE4 Subjects</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label><input type="checkbox" name="elective" value="Python"> Python</label>
+                        </td>
+                        <td>
+                            <label><input type="checkbox" name="elective" value="Multimedia"> Multimedia</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label><input type="checkbox" name="elective" value="Java"> Java</label>
+                        </td>
+                        <td>
+                            <label><input type="checkbox" name="elective" value="Cyber Security"> Cyber Security</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label><input type="checkbox" name="elective" value="Computer Networks"> Computer Networks</label>
+                        </td>
+                        <td>
+                            <label><input type="checkbox" name="elective" value="C++"> C++</label>
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                <button type="button" onclick="submitVote()">Vote</button>
+            </form>
+        </center>
+
+        <div class="results">
+            <h2>Poll Results</h2>
+            <p id="nameResult">Name: </p>
+            <p id="regNoResult">Register Number: </p>
+            <p id="mmCount">Multimedia: 0 votes</p>
+            <p id="pythonCount">Python: 0 votes</p>
+            <p id="csCount">Cyber Security: 0 votes</p>
+            <p id="jsCount">Java: 0 votes</p>
+            <p id="cnCount">Computer Networks: 0 votes</p>
+            <p id="cppCount">C++: 0 votes</p>
+        </div>
+    </div>
+
+    <script>
+        // Function to submit the vote
+        function submitVote() {
+            const name = document.getElementById('name').value;
+            const regNo = document.getElementById('registerNumber').value;
+            const selectedElectives = document.querySelectorAll('input[name="elective"]:checked');
+            
+            if (selectedElectives.length === 0) {
+                alert('Please select at least one elective before voting.');
+                return;
+            }
+            
+            // Get the selected elective values
+            const votes = {};
+            selectedElectives.forEach((elective) => {
+                votes[elective.value] = (votes[elective.value] || 0) + 1;
+            });
+
+            // Save the results to localStorage
+            let currentVotes = JSON.parse(localStorage.getItem('votes')) || {
+                Multimedia: 0,
+                Python: 0,
+                'Cyber Security': 0,
+                Java: 0,
+                'Computer Networks': 0,
+                'C++': 0
+            };
+
+            // Update the vote counts
+            for (const elective in votes) {
+                currentVotes[elective] += votes[elective];
+            }
+
+            localStorage.setItem('votes', JSON.stringify(currentVotes));
+
+            // Update the displayed results
+            document.getElementById('nameResult').textContent = Name: ${name};
+            document.getElementById('regNoResult').textContent = Registernumber: ${regNo};
+            updateResults(currentVotes);
+        }
+
+        // Function to update the results display
+        function updateResults(votes) {
+            document.getElementById('mmCount').textContent = Multimedia: ${votes.Multimedia} votes;
+            document.getElementById('pythonCount').textContent = Python: ${votes.Python} votes;
+            document.getElementById('csCount').textContent = Cybersecurity: ${votes['Cyber Security']} votes;
+            document.getElementById('jsCount').textContent = Java: ${votes.Java} votes;
+            document.getElementById('cnCount').textContent = Computernetworks: ${votes['Computer Networks']} votes;
+            document.getElementById('cppCount').textContent = C++: ${votes['C++']} votes;
+        }
+
+        // On page load, retrieve and display existing votes
+        document.addEventListener('DOMContentLoaded', function() {
+            const votes = JSON.parse(localStorage.getItem('votes')) || {
+                Multimedia: 0,
+                Python: 0,
+                'Cyber Security': 0,
+                Java: 0,
+                'Computer Networks': 0,
+                'C++': 0
+            };
+            updateResults(votes);
+        });
+    </script>
+</body>
+</html>
